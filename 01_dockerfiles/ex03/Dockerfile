@@ -1,16 +1,12 @@
-FROM debian
+FROM ruby
 
 RUN apt-get update -y && apt-get upgrade -y
 RUN apt-get install -y sudo git-core wget build-essential zlib1g-dev libyaml-dev\
 	libssl-dev libgdbm-dev libre2-dev libreadline-dev libncurses5-dev libffi-dev\
 	openssh-server checkinstall libxml2-dev libxslt-dev libcurl4-openssl-dev libicu-dev\
-	curl logrotate rsync python-docutils pkg-config cmake libkrb5-dev postfix nodejs yarn\
+	curl logrotate rsync python-docutils pkg-config cmake libkrb5-dev nodejs yarn\
 	postgresql postgresql-client libpq-dev postgresql-contrib redis-server nginx
 RUN apt-get remove -y ruby1.8
-RUN	mkdir /tmp/ruby && cd /tmp/ruby
-RUN curl --remote-name --progress https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.6.tar.gz
-RUN tar xzf ruby-2.3.6.tar.gz && cd ruby-2.3.6 && ./configure --disable-install-rdoc && make\
-	&& make install
 RUN	gem install bundler --no-ri --no-rdoc
 
 # INSTALL GO
