@@ -1,7 +1,7 @@
 FROM ruby
 
 RUN gem install rails
-
+RUN apt-get update -y && apt-get upgrade && apt-get install -y nodejs
 ONBUILD COPY . /opt/app
 
 ONBUILD WORKDIR /opt/app
