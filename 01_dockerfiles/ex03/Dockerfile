@@ -23,7 +23,7 @@ RUN		curl -OL --remote-name --progress https://www.kernel.org/pub/software/scm/g
 RUN		tar -xzf git-2.14.3.tar.gz
 WORKDIR /tmp/git/git-2.14.3
 RUN		./configure
-RUN		make
+RUN		make prefix=/usr/local all
 RUN		make prefix=/usr/local install
 WORKDIR	/
 RUN		rm -rf /tmp/git
@@ -45,18 +45,18 @@ WORKDIR	/home/git
 RUN		git clone https://github.com/rbenv/rbenv.git .rbenv
 WORKDIR	/home/git/.rbenv
 RUN		src/configure && make -C src
-ENV		PATH $PATH:/usr/local/bin/git:/usr/local/go/bin:/home/git/.gem/ruby/2.3.6/bin:/home/git/.rbenv/bin:/home/git/.rbenv/shims
+ENV		PATH $PATH:/usr/local/bin/git:/usr/local/go/bin:/home/git/.rbenv/versions/2.3.6/bin:/home/git/.rbenv/bin:/home/git/.rbenv/shims
 RUN		mkdir -p "$(rbenv root)"/plugins
 RUN		git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 RUN		eval "$(rbenv init -)"
-RUN		rbenv install 2.3.6 && ~/.rbenv/bin/rbenv global 2.3.6
+RUN		rbenv install 2.3.6 && rbenv global 2.3.6
 WORKDIR	/home/git
 RUN		gem install bundler --no-ri --no-rdoc
 RUN		gem install sqlite3 -v '1.3.13'
 RUN		gem install gitlab-development-kit
 RUN		gdk init
 WORKDIR	/home/git/gitlab-development-kit
+RUN		ln -s . gitlab-development-kit
 RUN		gdk install
-
-EXPOSE	3000 443 80 22
-ENTRYPOINT gdk run db && gdk run app
+EXPOSE	3000 443 80 22 2222
+ENTRYPOINT gdk run
